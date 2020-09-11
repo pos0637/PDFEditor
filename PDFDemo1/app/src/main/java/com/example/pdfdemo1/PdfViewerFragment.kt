@@ -1,6 +1,5 @@
 package com.example.pdfdemo1
 
-import android.R
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +20,6 @@ import com.foxit.uiextensions.annots.form.FormFillerAnnotHandler
 import com.foxit.uiextensions.annots.form.FormFillerModule
 import com.foxit.uiextensions.config.Config
 import java.io.InputStream
-import java.lang.Exception
 
 
 class PdfViewerFragment : Fragment() {
@@ -46,7 +44,7 @@ class PdfViewerFragment : Fragment() {
 
     fun openDocument(): Boolean {
         uiExtensionsManager?.openDocument(
-            "${PathUtils.getExternalStoragePath()}/testlog.pdf",
+            "${PathUtils.getExternalStoragePath()}/test/testlog.pdf",
             null
         )
         return true
