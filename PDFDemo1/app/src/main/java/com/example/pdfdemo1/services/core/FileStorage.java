@@ -9,7 +9,7 @@ import java.io.File;
  *
  * @author Alex
  */
-public class FileStorage {
+public final class FileStorage {
     /**
      * 读取文件
      *
@@ -17,7 +17,7 @@ public class FileStorage {
      * @param charsetName 字符集
      * @return 文件内容
      */
-    public String read(final String path, final String charsetName) {
+    public static String read(final String path, final String charsetName) {
         return FileIOUtils.readFile2String(new File(path), charsetName);
     }
 }
