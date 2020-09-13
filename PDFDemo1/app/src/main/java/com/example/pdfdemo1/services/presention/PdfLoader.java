@@ -27,6 +27,9 @@ public final class PdfLoader {
      */
     private static final String filename = "/teslog.pdf";
 
+    /**
+     * 界面扩展管理器
+     */
     private UIExtensionsManager uiExtensionsManager;
 
     /**
@@ -48,6 +51,10 @@ public final class PdfLoader {
             // 判断是否为首次打开
             if ((systemLog != null) && (systemLog.getFirstopen() == 0)) {
                 if (systemLog.getCopydataflag() == 1) {
+                    // 复制数据
+                } else if(systemLog.getCopyflag() == 1) {
+                    // 复制PDF
+                } else {
 
                 }
             }
