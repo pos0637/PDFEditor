@@ -19,7 +19,9 @@ public final class TestLogFiller implements Filler {
     private Map<String, JsonElement> testLogConfiguration;
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean initialize(Object... arguments) {
+        testLogConfiguration = (Map<String, JsonElement>) arguments[0];
         return false;
     }
 

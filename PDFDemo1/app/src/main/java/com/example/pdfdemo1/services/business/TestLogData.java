@@ -10,24 +10,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 模板配置
+ * 原始记录数据
  *
  * @author Alex
  */
-public final class TestLogConfiguration {
+public final class TestLogData {
     /**
      * 文件名
      */
-    private static final String filename = "/testlogcfg.ses";
+    private static final String filename = "/testlogdata.ses";
 
     /**
-     * 读取模板配置
+     * 读取原始记录数据
      *
      * @param path 路径
-     * @param key  配置名称
-     * @return 配置
+     * @return 数据
      */
-    public static Map<String, JsonElement> read(final String path, final String key) {
+    public static Map<String, JsonElement> read(final String path) {
         // 读取原始记录配置文件
         String content = FileStorage.read(path + filename, "utf-8");
         if (content == null) {
@@ -40,7 +39,7 @@ public final class TestLogConfiguration {
             // JSON字符串转换为JSON对象
             JsonObject object = JsonParser.parseString(content).getAsJsonObject();
             // 根据配置名称查找键值
-            JsonArray jsonArray = object.get(key).getAsJsonArray();
+            JsonArray jsonArray = object.get("testlogdata").getAsJsonArray();
             // 获取取首个元素
             JsonObject json = (JsonObject) jsonArray.get(0);
             // 映射为键值对
