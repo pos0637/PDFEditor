@@ -48,7 +48,7 @@ public final class SourceFiller implements Filler {
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean initialize(Object... arguments) {
+    public Filler initialize(Object... arguments) {
         document = (Document) arguments[0];
 
         // 构造需要复制域名
@@ -61,38 +61,32 @@ public final class SourceFiller implements Filler {
             }
         }
 
-        return false;
+        return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean fill(Form form, final Map<String, String> fields) {
-        try {
-            Element rootElement = document.getRootElement();
-            List<Element> list = rootElement.elements();
-            for (Element element : list) {
-                List<Element> bean = element.elements();
-                String fieldName = bean.get(0).getStringValue();
-                String fieldValue = bean.get(1).getStringValue();
+    public void fill(Form form, final Map<String, String> fields) throws Exception {
+        Element rootElement = document.getRootElement();
+        List<Element> list = rootElement.elements();
+        for (Element element : list) {
+            List<Element> bean = element.elements();
+            String fieldName = bean.get(0).getStringValue();
+            String fieldValue = bean.get(1).getStringValue();
 
-                // 根据XML节点名称进行匹配
-                if (element.getName().equals(EQUIP_INFO)) {
-                    // 查找是否存在指定域名的域
-                    Field field = form.getField(0, fieldName);
-                    if ((field != null) && isCopyField(fieldName)) {
-                        // 填充域内容
-                        if (!StringUtils.isEmpty(fieldValue)) {
-                            field.setValue(fieldValue);
-                        }
-                    } else {
-                        fields.put(fieldName, fieldValue);
+            // 根据XML节点名称进行匹配
+            if (element.getName().equals(EQUIP_INFO)) {
+                // 查找是否存在指定域名的域
+                Field field = form.getField(0, fieldName);
+                if ((field != null) && isCopyField(fieldName)) {
+                    // 填充域内容
+                    if (!StringUtils.isEmpty(fieldValue)) {
+                        field.setValue(fieldValue);
                     }
+                } else {
+                    fields.put(fieldName, fieldValue);
                 }
             }
-
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 

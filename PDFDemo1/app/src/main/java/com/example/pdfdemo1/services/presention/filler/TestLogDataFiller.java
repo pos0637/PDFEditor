@@ -19,26 +19,20 @@ public class TestLogDataFiller implements Filler {
     private Map<String, JsonElement> testLogData;
 
     @Override
-    public boolean initialize(Object... arguments) {
-        return false;
+    public Filler initialize(Object... arguments) {
+        return this;
     }
 
     @Override
-    public boolean fill(Form form, Map<String, String> fields) {
-        try {
-            // 遍历所有表单域
-            int count = form.getFieldCount(null);
-            for (int i = 0; i < count; i++) {
-                Field field = form.getField(i, null);
-                String value = JsonUtils.getValue(testLogData, field.getName());
-                if (value != null) {
-                    field.setValue(value);
-                }
+    public void fill(Form form, Map<String, String> fields) throws Exception {
+        // 遍历所有表单域
+        int count = form.getFieldCount(null);
+        for (int i = 0; i < count; i++) {
+            Field field = form.getField(i, null);
+            String value = JsonUtils.getValue(testLogData, field.getName());
+            if (value != null) {
+                field.setValue(value);
             }
-
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 }

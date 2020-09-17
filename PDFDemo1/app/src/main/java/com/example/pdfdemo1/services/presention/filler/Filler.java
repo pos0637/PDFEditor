@@ -14,16 +14,17 @@ public interface Filler {
      * 初始化
      *
      * @param arguments 参数
-     * @return 是否成功
+     * @return 填充器
+     * @throws Exception 异常
      */
-    boolean initialize(Object... arguments);
+    Filler initialize(Object... arguments) throws Exception;
 
     /**
      * 填充
      *
-     * @param form 表单
+     * @param form   表单
      * @param fields 域
-     * @return 是否成功
+     * @throws Exception 异常
      */
-    boolean fill(final Form form, final Map<String, String> fields);
+    void fill(final Form form, final Map<String, String> fields) throws Exception;
 }
