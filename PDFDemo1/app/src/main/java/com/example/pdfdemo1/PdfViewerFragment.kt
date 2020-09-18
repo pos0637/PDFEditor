@@ -2,18 +2,17 @@ package com.example.pdfdemo1
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.PathUtils
+import com.example.pdfdemo1.services.presention.PdfLoader
 import com.foxit.sdk.PDFViewCtrl
 import com.foxit.sdk.common.Constants
 import com.foxit.sdk.common.Library
 import com.foxit.sdk.pdf.PDFDoc
-import com.foxit.sdk.pdf.interform.Form
 import com.foxit.uiextensions.Module
 import com.foxit.uiextensions.UIExtensionsManager
 import com.foxit.uiextensions.annots.form.FormFillerAnnotHandler
@@ -33,6 +32,7 @@ class PdfViewerFragment : Fragment() {
 
     private var pdfViewCtrl: PDFViewCtrl? = null
     private var uiExtensionsManager: UIExtensionsManager? = null
+    private var pdfLoader: PdfLoader? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,10 +44,8 @@ class PdfViewerFragment : Fragment() {
     }
 
     fun openDocument(): Boolean {
-        uiExtensionsManager?.openDocument(
-            "${PathUtils.getExternalStoragePath()}/test/testlog.pdf",
-            password.toByteArray()
-        )
+        pdfLoader = PdfLoader(uiExtensionsManager)
+        pdfLoader!!.load("${PathUtils.getExternalStoragePath()}/test", "3000")
         return true
     }
 
@@ -70,44 +68,6 @@ class PdfViewerFragment : Fragment() {
 
         pdfViewCtrl = PDFViewCtrl(activity)
         pdfViewCtrl?.attachedActivity = activity
-        pdfViewCtrl?.registerDocEventListener(object : PDFViewCtrl.IDocEventListener {
-                override fun onDocWillOpen() {
-                }
-
-                override fun onDocOpened(p0: PDFDoc?, p1: Int) {
-                    try {
-                        val form = Form(p0)
-                        val count = form.getFieldCount(null)
-                        Log.e("", "==================== $count")
-
-                        val field = form.getField(6, null)
-                        Log.e(
-                            "",
-                            "==================== ${field.type}, ${field.controlCount}, ${field.options}"
-                        )
-
-                        Log.e("", "==================== ${field.getControl(0).javaClass.name}")
-                        Log.e("", "==================== ${field.getControl(0).widget.javaClass.name}")
-
-                        // TODO: get FormFillerAnnoHandler to run navigation thread
-                        val module = uiExtensionsManager?.getModuleByName(Module.MODULE_NAME_FORMFILLER) as FormFillerModule
-                        Log.e("", "==================== ${module is FormFillerModule}")
-                    } catch (e: Exception) {
-                    }
-                }
-
-            override fun onDocWillClose(p0: PDFDoc?) {
-            }
-
-            override fun onDocClosed(p0: PDFDoc?, p1: Int) {
-            }
-
-            override fun onDocWillSave(p0: PDFDoc?) {
-            }
-
-            override fun onDocSaved(p0: PDFDoc?, p1: Int) {
-            }
-        })
 
         val stream: InputStream = activity.resources.openRawResource(com.example.pdfdemo1.R.raw.uiextensions_config)
         val config = Config(stream)

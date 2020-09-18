@@ -2,6 +2,7 @@ package com.example.pdfdemo1.miscs;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.foxit.sdk.PDFException;
+import com.foxit.sdk.pdf.PDFDoc;
 import com.foxit.sdk.pdf.interform.ChoiceOption;
 import com.foxit.sdk.pdf.interform.ChoiceOptionArray;
 import com.foxit.sdk.pdf.interform.Field;
@@ -57,6 +58,21 @@ public final class PdfUtils {
 
             field.setOptions(options);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 添加书签
+     *
+     * @param document  PDF文档
+     * @param title     标题
+     * @param pageIndex 页码
+     */
+    public static void addBookmark(final PDFDoc document, final String title, final int pageIndex) {
+        try {
+            document.insertReadingBookmark(document.getReadingBookmarkCount(), title, pageIndex);
+        } catch (PDFException e) {
             e.printStackTrace();
         }
     }

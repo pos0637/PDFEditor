@@ -1,8 +1,8 @@
 package com.example.pdfdemo1.services.business;
 
 import com.example.pdfdemo1.entities.SystemLog;
+import com.example.pdfdemo1.miscs.JsonUtils;
 import com.example.pdfdemo1.services.core.FileStorage;
-import com.google.gson.Gson;
 
 /**
  * 系统文件配置
@@ -28,6 +28,6 @@ public final class SystemLogConfiguration {
             return null;
         }
 
-        return new Gson().fromJson(content, SystemLog.class);
+        return JsonUtils.toObject(content, SystemLog.class);
     }
 }

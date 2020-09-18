@@ -1,12 +1,14 @@
 package com.example.pdfdemo1.services.business;
 
 import com.example.pdfdemo1.entities.ModifyLog;
+import com.example.pdfdemo1.miscs.JsonUtils;
 import com.example.pdfdemo1.services.core.FileStorage;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 修改日志
@@ -14,6 +16,7 @@ import java.util.Map;
  * @author Alex
  */
 public final class ModifyLogData {
+
     /**
      * 文件名
      */
@@ -32,7 +35,17 @@ public final class ModifyLogData {
             return null;
         }
 
-        return new Gson().fromJson(content, new TypeToken<List<Map<String, List<ModifyLog>>>>() {
-        }.getType());
+        ModifyLogEntity entity = JsonUtils.toObject(content, ModifyLogEntity.class);
+        if (entity == null) {
+            return null;
+        }
+
+        return entity.getModifylog();
+    }
+
+    @Getter
+    @Setter
+    private static class ModifyLogEntity {
+        private List<Map<String, List<ModifyLog>>> modifylog;
     }
 }
