@@ -1,7 +1,9 @@
 package com.example.pdfdemo1.services.presention;
 
 import com.blankj.utilcode.util.ConvertUtils;
+import com.example.pdfdemo1.entities.ModifyLog;
 import com.example.pdfdemo1.entities.SystemLog;
+import com.example.pdfdemo1.services.business.ModifyLogData;
 import com.example.pdfdemo1.services.business.Source;
 import com.example.pdfdemo1.services.business.SystemLogConfiguration;
 import com.example.pdfdemo1.services.business.TestLogConfiguration;
@@ -17,7 +19,9 @@ import com.google.gson.JsonElement;
 import org.dom4j.Document;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,12 +70,21 @@ public final class PdfLoader {
      */
     private Map<String, JsonElement> testLogData;
 
+    /**
+     * 域
+     */
     private Map<String, String> fields = new HashMap<>();
+
+    /**
+     * 修改记录
+     */
+    private List<Map<String, List<ModifyLog>>> modifyLog = new ArrayList<>();
 
     public boolean load(String path, String eqpType) {
         try {
             loadResources(path, eqpType);
             openDocument(path);
+            modifyLog = ModifyLogData.read(path);
 
             // 判断文档中是否存在表单
             if (document.hasForm()) {
@@ -93,19 +106,14 @@ public final class PdfLoader {
                         }
                     }
 
-                    /*
-                    if (fieldMap.isEmpty())
-						XMLUtil.nonentityField(outputFile + File.separator + Source, form, fieldMap);
-					if (changelog != null && !changelog.getModifylog().isEmpty())
-						modifylogs.addAll(changelog.getModifylog());
-					else
-						modifylogs = new ArrayList<Map<String, List<Modifylog>>>();
-					initBookMark();
-                    */
+                    if (fields.isEmpty()) {
+                        new SourceFiller().initialize(document, testLog).fill(form, fields);
+                    }
+
+                    // TODO: 初始化书签
+                    // initBookMark
                 }
             }
-
-
 
             return true;
         } catch (Exception e) {
