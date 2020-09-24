@@ -81,7 +81,12 @@ public final class SourceFiller implements Filler {
                 if ((field != null) && isCopyField(fieldName)) {
                     // 填充域内容
                     if (!StringUtils.isEmpty(fieldValue)) {
-                        field.setValue(fieldValue);
+                        try {
+                            // 填充可能在JNI发生异常
+                            field.setValue(fieldValue);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     fields.put(fieldName, fieldValue);
